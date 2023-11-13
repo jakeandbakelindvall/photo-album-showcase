@@ -30,9 +30,9 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-fit min-h-screen items-center justify-center">
-      <div className="min-h-[50vh] w-5/6 rounded-2xl border-2 border-slate-800 bg-slate-700 p-8 text-orange-100 shadow-md shadow-blue-950">
-        <h1 className="text-center text-2xl">Photo Album Showcase</h1>
+    <div className="mx-auto flex h-fit min-h-screen w-11/12 flex-col text-orange-100 md:w-5/6">
+      <h1 className="my-8 text-center text-3xl">Photo Album Showcase</h1>
+      <div className="flex flex-wrap items-start">
         <Input
           placeholder="Enter Album ID"
           value={inputValue}
@@ -46,20 +46,17 @@ const App = () => {
         >
           Submit
         </Button>
-        <div>
-          {(invalid || isError) && (
-            <span
-              className="font-bold text-red-400"
-              data-testid="error-message"
-            >
-              Error:&nbsp;
-            </span>
-          )}
-          Please input a positive integer album ID, without leading zeroes
-        </div>
-        {isLoading && <div>Loading...</div>}
-        <PhotoList photos={data ?? []} dataTestId="photo-list" />
       </div>
+      <div>
+        {(invalid || isError) && (
+          <span className="font-bold text-red-400" data-testid="error-message">
+            Error:&nbsp;
+          </span>
+        )}
+        Please input a positive integer album ID, without leading zeroes
+      </div>
+      {isLoading && <div>Loading...</div>}
+      <PhotoList photos={data ?? []} dataTestId="photo-list" />
     </div>
   );
 };
