@@ -1,32 +1,26 @@
 import { useState } from "react";
+import { useQuery } from "react-query";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import Photo from "../../types/photo";
 import PhotoList from "../PhotoList/PhotoList";
 
 const App = () => {
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [queryValue, setQueryValue] = useState<string>("");
+
+  const { isLoading, error, data } = useQuery<Photo[]>(
+    ["getPhotosByAlbumId", queryValue],
+    () =>
+      fetch(
+        `https://jsonplaceholder.typicode.com/photos?albumId=${queryValue}`,
+      ).then((res) => res.json()),
+  );
 
   const handleSearch = (): void => {
-    setSearchValue("");
+    setQueryValue(inputValue);
+    setInputValue("");
   };
-
-  const photos: Photo[] = [
-    {
-      albumId: 1,
-      id: 1,
-      title: "accusamus beatae ad facilis cum similique qui sunt",
-      url: "https://via.placeholder.com/600/92c952",
-      thumbnailUrl: "https://via.placeholder.com/150/92c952",
-    },
-    {
-      albumId: 1,
-      id: 2,
-      title: "reprehenderit est deserunt velit ipsam",
-      url: "https://via.placeholder.com/600/771796",
-      thumbnailUrl: "https://via.placeholder.com/150/771796",
-    },
-  ];
 
   return (
     <div className="flex h-fit min-h-screen items-center justify-center">
@@ -34,13 +28,13 @@ const App = () => {
         <h1 className="text-center text-xl">Photo Album Showcase</h1>
         <Input
           placeholder="Enter Album ID"
-          value={searchValue}
-          setValue={setSearchValue}
+          value={inputValue}
+          setValue={setInputValue}
         />
-        <Button disabled={!searchValue.length} onClick={handleSearch}>
+        <Button disabled={!inputValue.length} onClick={handleSearch}>
           Submit
         </Button>
-        <PhotoList photos={photos} />
+        <PhotoList photos={data ?? []} />
       </div>
     </div>
   );
