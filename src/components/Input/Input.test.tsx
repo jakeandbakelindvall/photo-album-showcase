@@ -14,7 +14,7 @@ describe("Input", () => {
     test("Renders a provided value", () => {
       render(<Input value="Asdf value" />);
 
-      const input: HTMLElement = screen.getByText(/asdf value/i);
+      const input: HTMLElement = screen.getByDisplayValue(/asdf value/i);
       expect(input).toBeInTheDocument();
     });
   });
@@ -25,7 +25,7 @@ describe("Input", () => {
 
       render(<Input value="Asdf value" setValue={mockType} />);
 
-      const input: HTMLElement = screen.getByText(/asdf value/i);
+      const input: HTMLElement = screen.getByDisplayValue(/asdf value/i);
       fireEvent.change(input, { target: { value: "Asdf value1" } });
       expect(mockType).toHaveBeenCalledTimes(1);
     });

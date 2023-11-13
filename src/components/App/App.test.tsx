@@ -7,7 +7,7 @@ describe("App", () => {
       render(<App />);
 
       const title: HTMLElement = screen.getByText(/photo album showcase/i);
-      const input: HTMLElement = screen.getByPlaceholderText(/album id/i);
+      const input: HTMLElement = screen.getByPlaceholderText(/enter album id/i);
       const button: HTMLElement = screen.getByText(/submit/i);
       const helperText: HTMLElement = screen.getByText(
         /input a positive integer album id/i,
