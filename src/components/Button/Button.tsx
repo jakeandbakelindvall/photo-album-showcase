@@ -1,4 +1,4 @@
-const Button = () => {
+const Button = ({ children }: { children: React.ReactNode }) => {
   return null;
 };
 
