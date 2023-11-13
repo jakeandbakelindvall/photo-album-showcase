@@ -4,6 +4,6 @@ import App from "./App";
 
 test("renders welcome text", () => {
   render(<App />);
-  const linkElement = screen.getByText(/welcome to/i);
+  const linkElement: HTMLElement = screen.getByText(/photo album showcase/i);
   expect(linkElement).toBeInTheDocument();
 });
