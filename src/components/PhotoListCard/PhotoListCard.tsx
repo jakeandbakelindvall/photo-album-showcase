@@ -21,17 +21,31 @@ const PhotoListCard = ({
             alt="Thumbnail"
             className={imageClassName}
             src={photo.thumbnailUrl}
+            data-testid="thumbnail-image"
           ></img>
-          <Button variant="secondary" onClick={() => setExpanded(true)}>
+          <Button
+            variant="secondary"
+            onClick={() => setExpanded(true)}
+            dataTestId="open-card"
+          >
             Show more
           </Button>
         </>
       )}
       {expanded && (
         <>
-          <img alt="Full size" className={imageClassName} src={photo.url}></img>
-          <div>Album ID: {photo.albumId}</div>
-          <Button variant="secondary" onClick={() => setExpanded(false)}>
+          <img
+            alt="Full size"
+            className={imageClassName}
+            src={photo.url}
+            data-testid="full-image"
+          ></img>
+          <div data-testid="album-id">Album ID: {photo.albumId}</div>
+          <Button
+            variant="secondary"
+            onClick={() => setExpanded(false)}
+            dataTestId="close-card"
+          >
             Show less
           </Button>
         </>

@@ -10,13 +10,14 @@ const App = () => {
   const [queryValue, setQueryValue] = useState<string>("");
   const [invalid, setInvalid] = useState<boolean>(false);
 
-  const { isLoading, error, data } = useQuery<Photo[]>(
-    ["getPhotosByAlbumId", queryValue],
-    () =>
+  const { isLoading, isError, data } = useQuery<Photo[]>({
+    queryKey: ["getPhotosByAlbumId", queryValue],
+    queryFn: () =>
       fetch(
         `https://jsonplaceholder.typicode.com/photos?albumId=${queryValue}`,
       ).then((res) => res.json()),
-  );
+    enabled: !!queryValue.length,
+  });
 
   const handleSearch = (): void => {
     if (/^[1-9][0-9]*$/.test(inputValue)) {
@@ -36,12 +37,17 @@ const App = () => {
           placeholder="Enter Album ID"
           value={inputValue}
           setValue={setInputValue}
+          dataTestId="main-input"
         />
-        <Button disabled={!inputValue.length} onClick={handleSearch}>
+        <Button
+          disabled={!inputValue.length}
+          onClick={handleSearch}
+          dataTestId="main-button"
+        >
           Submit
         </Button>
         <div>
-          {invalid && (
+          {(invalid || isError) && (
             <span
               className="font-bold text-red-400"
               data-testid="error-message"
@@ -51,7 +57,8 @@ const App = () => {
           )}
           Please input a positive integer album ID, without leading zeroes
         </div>
-        <PhotoList photos={data ?? []} />
+        {isLoading && <div>Loading...</div>}
+        <PhotoList photos={data ?? []} dataTestId="photo-list" />
       </div>
     </div>
   );
