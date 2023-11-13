@@ -1,46 +1,57 @@
 import { useState } from "react";
+import { useQuery } from "react-query";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import Photo from "../../types/photo";
 import PhotoList from "../PhotoList/PhotoList";
 
 const App = () => {
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [queryValue, setQueryValue] = useState<string>("");
+  const [invalid, setInvalid] = useState<boolean>(false);
+
+  const { isLoading, error, data } = useQuery<Photo[]>(
+    ["getPhotosByAlbumId", queryValue],
+    () =>
+      fetch(
+        `https://jsonplaceholder.typicode.com/photos?albumId=${queryValue}`,
+      ).then((res) => res.json()),
+  );
 
   const handleSearch = (): void => {
-    setSearchValue("");
+    if (/^[1-9][0-9]*$/.test(inputValue)) {
+      setInvalid(false);
+      setQueryValue(inputValue);
+      setInputValue("");
+    } else {
+      setInvalid(true);
+    }
   };
-
-  const photos: Photo[] = [
-    {
-      albumId: 1,
-      id: 1,
-      title: "accusamus beatae ad facilis cum similique qui sunt",
-      url: "https://via.placeholder.com/600/92c952",
-      thumbnailUrl: "https://via.placeholder.com/150/92c952",
-    },
-    {
-      albumId: 1,
-      id: 2,
-      title: "reprehenderit est deserunt velit ipsam",
-      url: "https://via.placeholder.com/600/771796",
-      thumbnailUrl: "https://via.placeholder.com/150/771796",
-    },
-  ];
 
   return (
     <div className="flex h-fit min-h-screen items-center justify-center">
       <div className="min-h-[50vh] w-5/6 rounded-2xl border-2 border-slate-800 bg-slate-700 p-8 text-orange-100 shadow-md shadow-blue-950">
-        <h1 className="text-center text-xl">Photo Album Showcase</h1>
+        <h1 className="text-center text-2xl">Photo Album Showcase</h1>
         <Input
           placeholder="Enter Album ID"
-          value={searchValue}
-          setValue={setSearchValue}
+          value={inputValue}
+          setValue={setInputValue}
         />
-        <Button disabled={!searchValue.length} onClick={handleSearch}>
+        <Button disabled={!inputValue.length} onClick={handleSearch}>
           Submit
         </Button>
-        <PhotoList photos={photos} />
+        <div>
+          {invalid && (
+            <span
+              className="font-bold text-red-400"
+              data-testid="error-message"
+            >
+              Error:&nbsp;
+            </span>
+          )}
+          Please input a positive integer album ID, without leading zeroes
+        </div>
+        <PhotoList photos={data ?? []} />
       </div>
     </div>
   );

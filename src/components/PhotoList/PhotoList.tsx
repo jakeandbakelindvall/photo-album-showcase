@@ -8,6 +8,7 @@ const PhotoList = ({
 }: { photos: Photo[] } & TestTarget) => {
   return (
     <div data-testid={dataTestId}>
+      <div className="my-2 font-bold">Results:</div>
       {photos.map((photo) => (
         <PhotoListCard
           key={`photo-list-card-${photo.id}`}
