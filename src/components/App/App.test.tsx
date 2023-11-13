@@ -53,9 +53,8 @@ const mockPhotos: Photo[] = [
 ];
 
 describe("App", () => {
-  // Still a potential source of leakiness, and a definite source
-  // of some extra output for the no-param default query, but not worth
-  // aggressively fixing:
+  // Still a potential source of leakiness, but was fighting it a little much
+  // when dealing with it after each, so all will have to do for demo's sake:
   afterAll(() => {
     nock.restore();
     nock.cleanAll();
@@ -86,7 +85,7 @@ describe("App", () => {
   });
 
   describe("Interaction", () => {
-    test("Clears the input on a button press for submission", () => {
+    test("Clears the input on a button press for submission", async () => {
       renderWithClient(<App />);
 
       const input: HTMLElement = screen.getByPlaceholderText(/enter album id/i);
@@ -96,8 +95,12 @@ describe("App", () => {
 
       const button: HTMLElement = screen.getByText(/submit/i);
       fireEvent.click(button);
-      const clearedInput: HTMLElement | null = screen.queryByDisplayValue(/9/i);
-      expect(clearedInput).not.toBeInTheDocument();
+
+      await waitFor(() => {
+        const clearedInput: HTMLElement | null =
+          screen.queryByDisplayValue(/9/i);
+        expect(clearedInput).not.toBeInTheDocument();
+      });
     });
 
     test("Shows a list on a valid submission", async () => {
