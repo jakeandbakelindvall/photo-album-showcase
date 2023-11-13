@@ -46,6 +46,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cypress": "^13.5.0",
+    "nock": "^13.3.8",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "tailwindcss": "^3.3.5"
